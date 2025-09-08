@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   elevro:
     build: .
@@ -14,17 +15,17 @@ services:
       - DB_PASS=secret
       - DB_NAME=elevrodb
 
-postgres:
-  image: postgres:15
-  container_name: elevro_db
-  restart: unless-stopped
-  environment:
-    POSTGRES_USER: elevro
-    POSTGRES_PASSWORD: secret
-    POSTGRES_DB: elevrodb
-  volumes:
-    - pgdata:/var/lib/postgresql/data
-    - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  postgres:
+    image: postgres:15
+    container_name: elevro_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: elevro
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: elevrodb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
 volumes:
   pgdata:
