@@ -10,13 +10,13 @@ def get_connection():
         dbname=os.getenv("DB_NAME", "elevrodb"),
     )
 
-def get_user(email):
+def get_user_by_email(email: str):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT id, name, email, password_hash FROM users WHERE email = %s AND active = TRUE", (email,))
     row = cur.fetchone()
     conn.close()
-    return row
+    return row  # (id, name, email, hash)
 
-def verify_password(plain_pw, hashed_pw):
+def verify_password(plain_pw: str, hashed_pw: str) -> bool:
     return bcrypt.checkpw(plain_pw.encode("utf-8"), hashed_pw.encode("utf-8"))
