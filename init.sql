@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS goals (
     metric VARCHAR(50) NOT NULL,
     target_value INT NOT NULL,
     timeframe VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_metric UNIQUE (user_id, metric)  -- 🔑 new
 );
 
 -- Motivation Messages
@@ -60,7 +61,8 @@ VALUES
 (1, 'protein', 140, 'daily'),
 (1, 'workout_volume', 9000, 'weekly'),
 (1, 'cardio_minutes', 120, 'weekly')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (user_id, metric) DO UPDATE
+SET target_value = EXCLUDED.target_value;
 
 INSERT INTO motivation_messages (crew_id, user_id, message, start_date)
 VALUES (1, 1, 'Push for 1% better every day!', CURRENT_DATE)
