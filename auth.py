@@ -1,26 +1,22 @@
-import streamlit_authenticator as stauth
 import streamlit as st
-from db import get_user, verify_password
+from db import get_user_by_email, verify_password
 
 def login():
-    if "user" not in st.session_state:
-        st.session_state["user"] = None
-
-    if st.session_state["user"]:
+    if "user" in st.session_state and st.session_state["user"]:
         return st.session_state["user"]
 
-    # Login form
-    st.sidebar.title("Login")
-    email = st.sidebar.text_input("Email")
-    password = st.sidebar.text_input("Password", type="password")
+    st.title("🔐 Login to Elevro")
 
-    if st.sidebar.button("Login"):
-        user = get_user(email)
+    email = st.text_input("Email")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        user = get_user_by_email(email)
         if user and verify_password(password, user[3]):
             st.session_state["user"] = {"id": user[0], "name": user[1], "email": user[2]}
-            st.sidebar.success(f"Welcome back, {user[1]}!")
-            return st.session_state["user"]
+            st.success(f"Welcome, {user[1]}! 🎉")
+            st.experimental_rerun()  # refresh page after login
         else:
-            st.sidebar.error("❌ Invalid email or password")
+            st.error("❌ Invalid email or password")
 
     return None
