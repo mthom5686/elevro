@@ -2,9 +2,11 @@ import streamlit as st
 from db import get_user_by_email, verify_password
 
 def login():
+    # Already logged in
     if "user" in st.session_state and st.session_state["user"]:
         return st.session_state["user"]
 
+    # Show login form
     st.title("🔐 Login to Elevro")
 
     email = st.text_input("Email")
@@ -14,8 +16,7 @@ def login():
         user = get_user_by_email(email)
         if user and verify_password(password, user[3]):
             st.session_state["user"] = {"id": user[0], "name": user[1], "email": user[2]}
-            st.success(f"Welcome, {user[1]}! 🎉")
-            st.experimental_rerun()  # refresh page after login
+            st.experimental_rerun()
         else:
             st.error("❌ Invalid email or password")
 
