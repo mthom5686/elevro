@@ -1,17 +1,12 @@
 FROM python:3.11-slim
 
-# Set workdir
 WORKDIR /app
 
-# Install dependencies
-COPY . .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
-COPY app/ ./
+COPY . .
 
-# Expose port for Streamlit
 EXPOSE 8501
 
-# Run Streamlit
-CMD ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
