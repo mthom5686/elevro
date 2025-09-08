@@ -7,3 +7,31 @@ services:
     ports:
       - "8501:8501"
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=elevro
+      - DB_PASS=secret
+      - DB_NAME=elevrodb
+
+  postgres:
+    image: postgres:15
+    container_name: elevro_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: elevro
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: elevrodb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elevro -d elevrodb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
