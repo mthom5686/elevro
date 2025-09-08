@@ -1,17 +1,32 @@
 import streamlit as st
 from auth import login
+from db import get_goals
 
 st.set_page_config(page_title="Elevro", layout="wide")
 
+# Login check
 user = login()
 
 if not user:
-    st.warning("Please log in to continue.")
-    st.stop()
+    st.stop()  # stop rendering until login succeeds
 
-# Logged in!
+# Logged-in home page
 st.title(f"Welcome {user['name']} 👋")
-st.write("This is your personal dashboard. Here’s how you’re doing relative to your goals:")
 
-# TODO: query DB for user’s goals + progress and display progress bars
-st.info("🚧 Coming soon: your progress against protein, workout volume, and cardio goals.")
+st.subheader("Your Current Goals")
+goals = get_goals(user["id"])
+if goals:
+    for metric, value in goals.items():
+        st.write(f"- {metric}: {value}")
+else:
+    st.info("No goals found yet. Go to ⚙️ Settings to add them.")
+
+st.sidebar.title("Navigation")
+st.sidebar.page_link("pages/leaderboard.py", label="🏆 Leaderboard")
+st.sidebar.page_link("pages/profiles.py", label="👤 Profiles")
+st.sidebar.page_link("pages/settings.py", label="⚙️ Settings")
+
+# Logout button
+if st.sidebar.button("Logout"):
+    st.session_state["user"] = None
+    st.experimental_rerun()
