@@ -1,12 +1,12 @@
-# Elevro 🏋️‍♂️
+# Elevro 🚀
 
-A social fitness dashboard where you and your friends (Crews) can:
-- Track workout volume, protein intake, cardio minutes, and bodyweight
-- See leaderboards for accountability
-- Flip through each other's stats (full transparency)
-- Set personal goals and measure progress
+Social fitness dashboard where you and your Crews can:
+- Track workout volume, protein intake, cardio, and bodyweight
+- See leaderboards
+- Flip through each other's stats
+- Set goals and measure progress
 
-## Run Locally
+## Run locally with Docker
 
 ```bash
 git clone https://github.com/YOURNAME/elevro.git
