@@ -4,13 +4,17 @@ from db import get_goals
 
 st.set_page_config(page_title="Elevro", layout="wide")
 
-# Login check
+# -------------------
+# LOGIN CHECK
+# -------------------
 user = login()
 
 if not user:
-    st.stop()  # stop rendering until login succeeds
+    st.stop()  # 🚨 stops Streamlit from rendering anything else until logged in
 
-# Logged-in home page
+# -------------------
+# HOME PAGE (AFTER LOGIN)
+# -------------------
 st.title(f"Welcome {user['name']} 👋")
 
 st.subheader("Your Current Goals")
@@ -21,12 +25,17 @@ if goals:
 else:
     st.info("No goals found yet. Go to ⚙️ Settings to add them.")
 
+# -------------------
+# NAVIGATION
+# -------------------
 st.sidebar.title("Navigation")
 st.sidebar.page_link("pages/leaderboard.py", label="🏆 Leaderboard")
 st.sidebar.page_link("pages/profiles.py", label="👤 Profiles")
 st.sidebar.page_link("pages/settings.py", label="⚙️ Settings")
 
-# Logout button
+# -------------------
+# LOGOUT
+# -------------------
 if st.sidebar.button("Logout"):
     st.session_state["user"] = None
     st.experimental_rerun()
