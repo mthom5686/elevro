@@ -19,7 +19,8 @@ def get_leaderboard():
                MAX(CASE WHEN g.metric = 'cardio_minutes' THEN g.target_value END) as cardio
         FROM users u
         LEFT JOIN goals g ON u.id = g.user_id
-        GROUP BY u.name;
+        GROUP BY u.name
+        ORDER BY u.name;
     """)
     rows = cur.fetchall()
     conn.close()
