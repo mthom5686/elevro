@@ -25,3 +25,27 @@ def get_leaderboard():
     rows = cur.fetchall()
     conn.close()
     return rows
+
+def get_goals(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT metric, target_value FROM goals WHERE user_id = %s", (user_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return {metric: value for metric, value in rows}
+
+def save_goals(user_id, goals_dict):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    for metric, value in goals_dict.items():
+        cur.execute("""
+            INSERT INTO goals (user_id, metric, target_value, timeframe)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (user_id, metric) 
+            DO UPDATE SET target_value = EXCLUDED.target_value;
+        """, (user_id, metric, value,
+              "daily" if metric == "protein" else "weekly"))
+
+    conn.commit()
+    conn.close()
