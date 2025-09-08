@@ -43,9 +43,13 @@ CREATE TABLE IF NOT EXISTS motivation_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+--Deactivate Users
+ALTER TABLE users 
+ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE;
+
 -- Demo user + crew
 INSERT INTO users (name, email, password_hash)
-VALUES ('Demo User', 'demo@elevro.com', 'hashedpassword')
+VALUES ('Demo User', 'demo@elevro.com', '$2b$12$KixwBIkTgF1yd9J7T6YF1O7yFjPXL6TrtoipFO9Yf6aTj8k8kSKpi')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO crews (name, created_by)
