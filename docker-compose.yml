@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  elevro:
+    build: .
+    container_name: elevro_app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=elevro
+      - DB_PASS=secret
+      - DB_NAME=elevrodb
+
+  postgres:
+    image: postgres:15
+    container_name: elevro_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: elevro
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: elevrodb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
